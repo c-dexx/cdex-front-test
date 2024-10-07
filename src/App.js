@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { ChakraProvider, Box, Flex } from '@chakra-ui/react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import MovieSearch from './components/MovieSearch';
+import MovieDetails from './components/MovieDetails';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChakraProvider>
+      <Router>
+        <Flex h="100vh">
+          <Sidebar />
+          <Box
+            as="main"
+            ml="250px"  // This makes sure the content does not overlap the sidebar
+            w="full"
+            p="6"
+            bg="gray.50"
+          >
+            <Routes>
+              <Route path="/" element={<MovieSearch />} />
+              <Route path="/movie/:id" element={<MovieDetails />} />
+            </Routes>
+          </Box>
+        </Flex>
+      </Router>
+    </ChakraProvider>
   );
 }
 
