@@ -2,15 +2,60 @@ import { Box, Input, Button, SimpleGrid, Image, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import FilterSortBar from './FilterSortBar';
 
 const MovieSearch = () => {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
+  const [filters, setFilters] = useState({
+    genre: '',
+    sortBy: '',
+    rating: '',
+  });
+
+  const fetchMovieDetails = async (movie) => {
+    try {
+      const response = await axios.get(`http://www.omdbapi.com/?apikey=80e7807a&i=${movie.imdbID}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching movie details', error);
+      return null;
+    }
+  };
 
   const handleSearch = async () => {
     try {
       const response = await axios.get(`http://www.omdbapi.com/?apikey=80e7807a&s=${query}`);
-      setMovies(response.data.Search || []);
+      let fetchedMovies = response.data.Search || [];
+
+      // Fetch detailed movie data for genre and rating filtering
+      fetchedMovies = await Promise.all(
+        fetchedMovies.map(async (movie) => {
+          const details = await fetchMovieDetails(movie);
+          return details;
+        })
+      );
+
+      // Apply genre filter
+      if (filters.genre) {
+        fetchedMovies = fetchedMovies.filter(movie => movie.Genre?.toLowerCase().includes(filters.genre.toLowerCase()));
+      }
+
+      // Apply rating filter
+      if (filters.rating) {
+        fetchedMovies = fetchedMovies.filter(movie => parseFloat(movie.imdbRating) >= parseFloat(filters.rating));
+      }
+
+      // Apply sorting
+      if (filters.sortBy === 'title') {
+        fetchedMovies = fetchedMovies.sort((a, b) => a.Title.localeCompare(b.Title));
+      } else if (filters.sortBy === 'year') {
+        fetchedMovies = fetchedMovies.sort((a, b) => b.Year - a.Year);
+      } else if (filters.sortBy === 'rating') {
+        fetchedMovies = fetchedMovies.sort((a, b) => b.imdbRating - a.imdbRating);
+      }
+
+      setMovies(fetchedMovies);
     } catch (error) {
       console.error('Error fetching movies', error);
     }
@@ -18,33 +63,29 @@ const MovieSearch = () => {
 
   return (
     <Box>
-      <Text fontSize="2xl" mb="4" fontWeight="bold">Search Movies</Text>
-      <Box mb="6">
-        <Input
-          placeholder="Search for a movie..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          w="300px"
-          mr="4"
-        />
-        <Button onClick={handleSearch} colorScheme="blue">
-          Search
-        </Button>
-      </Box>
+      <Input
+        placeholder="Search for a movie..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        w="300px"
+        mr="4"
+        mb="4"
+      />
+      <Button onClick={handleSearch} colorScheme="blue" mb="4">
+        Search
+      </Button>
 
-      <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing="6">
+      <FilterSortBar filters={filters} setFilters={setFilters} handleSearch={handleSearch} />
+
+      <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing="6" mt="6">
         {movies.map((movie) => (
           <Link to={`/movie/${movie.imdbID}`} key={movie.imdbID}>
-            <Box
-              bg="white"
-              shadow="md"
-              rounded="md"
-              p="4"
-              _hover={{ transform: 'scale(1.05)', transition: '0.2s' }}
-            >
-              <Image src={movie.Poster} alt={movie.Title} rounded="md" mb="3" />
-              <Text fontSize="xl" fontWeight="bold">{movie.Title}</Text>
+            <Box bg="white" shadow="md" p="4" rounded="md">
+              <Image src={movie.Poster} alt={movie.Title} rounded="md" />
+              <Text fontWeight="bold" mt="2">{movie.Title}</Text>
               <Text>{movie.Year}</Text>
+              <Text>Genre: {movie.Genre}</Text>
+              <Text>IMDb Rating: {movie.imdbRating}</Text>  {/* Show movie rating */}
             </Box>
           </Link>
         ))}
