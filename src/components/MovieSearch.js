@@ -1,4 +1,4 @@
-import { Box, Input, Button, SimpleGrid, Image, Text } from '@chakra-ui/react';
+import { Box, Input, Button, SimpleGrid, Image, Text , Flex} from '@chakra-ui/react';
 import { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -62,35 +62,40 @@ const MovieSearch = () => {
   };
 
   return (
-    <Box>
+    <Box 
+      bgGradient="linear(to-r, gray.700, gray.900)"
+      minH="100vh"
+      overflow={'hidden'}>
+    <Flex justifyContent="center" alignItems="center" mt="25">
       <Input
         placeholder="Search for a movie..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         w="300px"
-        mr="4"
-        mb="4"
+        fontSize='lg'
+        bg={'white'}
       />
-      <Button onClick={handleSearch} colorScheme="blue" mb="4">
+      <Button onClick={handleSearch} colorScheme="blue" ml="4">
         Search
       </Button>
-
-      <FilterSortBar filters={filters} setFilters={setFilters} handleSearch={handleSearch} />
-
-      <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing="6" mt="6">
-        {movies.map((movie) => (
-          <Link to={`/movie/${movie.imdbID}`} key={movie.imdbID}>
-            <Box bg="white" shadow="md" p="4" rounded="md">
-              <Image src={movie.Poster} alt={movie.Title} rounded="md" />
-              <Text fontWeight="bold" mt="2">{movie.Title}</Text>
-              <Text>{movie.Year}</Text>
-              <Text>Genre: {movie.Genre}</Text>
-              <Text>IMDb Rating: {movie.imdbRating}</Text>  {/* Show movie rating */}
-            </Box>
-          </Link>
-        ))}
-      </SimpleGrid>
-    </Box>
+    </Flex>
+  
+    <FilterSortBar filters={filters} setFilters={setFilters} handleSearch={handleSearch} />
+  
+    <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing="6" mt="8">
+      {movies.map((movie) => (
+        <Link to={`/movie/${movie.imdbID}`} key={movie.imdbID}>
+          <Box bg='whiteAlpha.900' shadow="md" p="4" rounded="md" fontSize='lg'>
+            <Image src={movie.Poster} alt={movie.Title} rounded="md" />
+            <Text fontWeight="bold" mt="2">{movie.Title}</Text>
+            <Text>{movie.Year}</Text>
+            <Text>Genre: {movie.Genre}</Text>
+            <Text>IMDb Rating: {movie.imdbRating}</Text>  {/* Show movie rating */}
+          </Box>
+        </Link>
+      ))}
+    </SimpleGrid>
+  </Box>
   );
 };
 

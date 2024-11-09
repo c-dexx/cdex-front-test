@@ -17,7 +17,7 @@ const MovieGacha = () => {
   };
 
   return (
-    <Box textAlign="center">
+    <Box textAlign="center" mt='8'>
       <VStack spacing="4">
         <Button colorScheme="pink" onClick={getRandomMovie}>
           Get Random Movie

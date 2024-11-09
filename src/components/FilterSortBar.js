@@ -7,8 +7,8 @@ const FilterSortBar = ({ filters, setFilters, handleSearch }) => {
   };
 
   return (
-    <Box mb="4" display="flex" alignItems="center">
-      <Select name="genre" placeholder="Filter by Genre" onChange={handleFilterChange} mr="4">
+    <Box mt="8" display="flex" justifyContent='center' alignItems="center" fontSize='lg'>
+      <Select name="genre" placeholder="Filter by Genre" onChange={handleFilterChange} mr="4" w={'300px'} bg={'white'}>
         <option value="action">Action</option>
         <option value="comedy">Comedy</option>
         <option value="drama">Drama</option>
@@ -16,7 +16,7 @@ const FilterSortBar = ({ filters, setFilters, handleSearch }) => {
         <option value="animation">Animation</option>
       </Select>
 
-      <Select name="sortBy" placeholder="Sort by" onChange={handleFilterChange} mr="4">
+      <Select name="sortBy" placeholder="Sort by" onChange={handleFilterChange} mr="4" w={'300px'} bg={'white'}>
         <option value="title">Title</option>
         <option value="year">Year</option>
         <option value="rating">Rating</option>
@@ -31,6 +31,7 @@ const FilterSortBar = ({ filters, setFilters, handleSearch }) => {
         onChange={handleFilterChange}
         w="150px"
         mr="4"
+        bg={'white'}
       />
 
       <Button onClick={handleSearch} colorScheme="blue">

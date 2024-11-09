@@ -1,4 +1,4 @@
-import { ChakraProvider, Box, Flex } from '@chakra-ui/react';
+import { ChakraProvider, Box, Flex, Grid } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import MovieSearch from './components/MovieSearch';
@@ -14,19 +14,17 @@ function App() {
     <ChakraProvider>
       <AuthProvider>
         <Router>
-          <Flex h="100vh">
-            <Sidebar />
-            <Box as="main" ml="250px" w="full" p="6" bg="gray.50">
-              <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/movies" element={<MovieSearch />} />
-                <Route path="/movie/:id" element={<MovieDetails />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/gacha" element={<MovieGacha />} />  {/* Add Gacha route */}
-              </Routes>
-            </Box>
-          </Flex>
+          <Sidebar/>
+          <Box as="main" w="full">
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/movies" element={<MovieSearch />} />
+              <Route path="/movie/:id" element={<MovieDetails />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/gacha" element={<MovieGacha />} />  {/* Add Gacha route */}
+            </Routes>
+          </Box>
         </Router>
       </AuthProvider>
     </ChakraProvider>
