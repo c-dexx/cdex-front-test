@@ -66,7 +66,7 @@ const MovieSearch = () => {
       bgGradient="linear(to-r, gray.700, gray.900)"
       minH="100vh"
       overflow={'hidden'}>
-    <Flex justifyContent="center" alignItems="center" mt="25">
+    <Flex justifyContent="center" alignItems="center" mt="36">
       <Input
         placeholder="Search for a movie..."
         value={query}

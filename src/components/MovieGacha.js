@@ -17,9 +17,13 @@ const MovieGacha = () => {
   };
 
   return (
-    <Box textAlign="center" mt='8'>
-      <VStack spacing="4">
-        <Button colorScheme="pink" onClick={getRandomMovie}>
+    <Box 
+    textAlign="center"
+    bgGradient="linear(to-r, gray.700, gray.900)"
+    minH="100vh"
+    overflow={'hidden'}>
+      <VStack spacing="4" mt="36">
+        <Button colorScheme="green" onClick={getRandomMovie}>
           Get Random Movie
         </Button>
 
