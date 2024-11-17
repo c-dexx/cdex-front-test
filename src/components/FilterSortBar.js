@@ -7,8 +7,8 @@ const FilterSortBar = ({ filters, setFilters, handleSearch }) => {
   };
 
   return (
-    <Box mt="8" display="flex" justifyContent='center' alignItems="center" fontSize='lg'>
-      <Select name="genre" placeholder="Filter by Genre" onChange={handleFilterChange} mr="4" w={'300px'} bg={'white'}>
+    <Box mt="0" display="flex" justifyContent='center' alignItems="center" fontSize='lg' ml="110px">
+      <Select name="genre" placeholder="Filter by Genre" onChange={handleFilterChange} mr="4" w={'160px'} bg={'#D9D9D9'}>
         <option value="action">Action</option>
         <option value="comedy">Comedy</option>
         <option value="drama">Drama</option>
@@ -16,7 +16,7 @@ const FilterSortBar = ({ filters, setFilters, handleSearch }) => {
         <option value="animation">Animation</option>
       </Select>
 
-      <Select name="sortBy" placeholder="Sort by" onChange={handleFilterChange} mr="4" w={'300px'} bg={'white'}>
+      <Select name="sortBy" placeholder="Sort by" onChange={handleFilterChange} mr="4" w={'160px'} bg={'#D9D9D9'}>
         <option value="title">Title</option>
         <option value="year">Year</option>
         <option value="rating">Rating</option>
@@ -24,17 +24,21 @@ const FilterSortBar = ({ filters, setFilters, handleSearch }) => {
 
       <Input
         name="rating"
-        placeholder="Min IMDb Rating"
+        placeholder="Min Rating"
         type="number"
         min="0"
         max="10"
         onChange={handleFilterChange}
-        w="150px"
+        w="160px"
         mr="4"
-        bg={'white'}
+        bg={'#D9D9D9'}
       />
 
-      <Button onClick={handleSearch} colorScheme="blue">
+      <Button onClick={handleSearch} bgColor='#9E3CD7' color="#FFFFFF" fontWeight="extrabold"
+      _hover={{
+        bgColor: "#5B1981", // Keeps the same background color
+        color: "#FFFFFF",   // Keeps the same text color
+      }}>
         Apply
       </Button>
     </Box>
