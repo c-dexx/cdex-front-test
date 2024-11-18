@@ -13,7 +13,12 @@ const Signup = () => {
   };
 
   return (
-    <Box maxW="sm" mx="auto" p="8" mt="10" bg="gray.50" shadow="md" rounded="md">
+  <Box
+  bgGradient="linear(to-r, gray.700, gray.900)"
+  minH="100vh"
+  overflow={'hidden'}
+  >
+    <Box maxW="sm" mx="auto" p="8"  bg="gray.50" shadow="md" rounded="md" mt="72">
       <Heading as="h1" mb="6">Sign Up</Heading>
       <Input
         placeholder="Email"
@@ -28,13 +33,14 @@ const Signup = () => {
         onChange={(e) => setPassword(e.target.value)}
         mb="6"
       />
-      <Button colorScheme="teal" w="full" onClick={handleSubmit}>
+      <Button colorScheme="blue" w="full" onClick={handleSubmit}>
         Sign Up
       </Button>
       <Text mt="4" textAlign="center">
         Already have an account? <Link to="/login">Login</Link>
       </Text>
     </Box>
+  </Box>
   );
 };
 
