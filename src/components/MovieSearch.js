@@ -1,12 +1,12 @@
-import { Box, Input, Button, SimpleGrid, Image, Text , Flex, Badge} from '@chakra-ui/react';
+import { Box, Input, Button, SimpleGrid, Text, Flex, Badge } from '@chakra-ui/react';
 import { useState } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import FilterSortBar from './FilterSortBar';
+import moviesData from './movielist.json';
 
 const MovieSearch = () => {
   const [query, setQuery] = useState('');
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState(moviesData.movies);
   const [filters, setFilters] = useState({
     genre: '',
     sortBy: '',
@@ -31,54 +31,40 @@ const MovieSearch = () => {
         return "gray.500";
     }
   };
-  
 
-  const fetchMovieDetails = async (movie) => {
-    try {
-      const response = await axios.get(`http://www.omdbapi.com/?apikey=80e7807a&i=${movie.imdbID}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching movie details', error);
-      return null;
-    }
-  };
+  const handleSearch = () => {
+    let filteredMovies = moviesData.movies;
 
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(`http://www.omdbapi.com/?apikey=80e7807a&s=${query}`);
-      let fetchedMovies = response.data.Search || [];
-
-      // Fetch detailed movie data for genre and rating filtering
-      fetchedMovies = await Promise.all(
-        fetchedMovies.map(async (movie) => {
-          const details = await fetchMovieDetails(movie);
-          return details;
-        })
+    if (query) {
+      filteredMovies = filteredMovies.filter(movie =>
+        movie.title.toLowerCase().includes(query.toLowerCase())
       );
-
-      // Apply genre filter
-      if (filters.genre) {
-        fetchedMovies = fetchedMovies.filter(movie => movie.Genre?.toLowerCase().includes(filters.genre.toLowerCase()));
-      }
-
-      // Apply rating filter
-      if (filters.rating) {
-        fetchedMovies = fetchedMovies.filter(movie => parseFloat(movie.imdbRating) >= parseFloat(filters.rating));
-      }
-
-      // Apply sorting
-      if (filters.sortBy === 'title') {
-        fetchedMovies = fetchedMovies.sort((a, b) => a.Title.localeCompare(b.Title));
-      } else if (filters.sortBy === 'year') {
-        fetchedMovies = fetchedMovies.sort((a, b) => b.Year - a.Year);
-      } else if (filters.sortBy === 'rating') {
-        fetchedMovies = fetchedMovies.sort((a, b) => b.imdbRating - a.imdbRating);
-      }
-
-      setMovies(fetchedMovies);
-    } catch (error) {
-      console.error('Error fetching movies', error);
     }
+
+    // Apply genre filter
+    if (filters.genre) {
+      filteredMovies = filteredMovies.filter(movie =>
+        movie.genre.toLowerCase().includes(filters.genre.toLowerCase())
+      );
+    }
+
+    // Apply rating filter
+    if (filters.rating) {
+      filteredMovies = filteredMovies.filter(movie =>
+        parseFloat(movie.rating) >= parseFloat(filters.rating)
+      );
+    }
+
+    // Apply sorting
+    if (filters.sortBy === 'title') {
+      filteredMovies = filteredMovies.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (filters.sortBy === 'year') {
+      filteredMovies = filteredMovies.sort((a, b) => b.year - a.year);
+    } else if (filters.sortBy === 'rating') {
+      filteredMovies = filteredMovies.sort((a, b) => b.rating - a.rating);
+    }
+
+    setMovies(filteredMovies);
   };
 
   return (
@@ -117,11 +103,11 @@ const MovieSearch = () => {
     >
     {movies.map((movie) => (
         <Box
-          key={movie.imdbID}
+          key={movie.id}
           position="relative"
           w="100%"
           h="600px"
-          bgImage={`url(${movie.Poster || "fallback-image.jpg"})`}
+          bgImage={`url(${movie.poster || "fallback-image.jpg"})`}
           bgSize="cover"
           bgPosition="center"
           rounded="lg"
@@ -151,7 +137,7 @@ const MovieSearch = () => {
           >
             {/* Genre Badge */}
             <Box display="flex" gap="2" flexWrap="wrap">
-              {movie.Genre?.split(",").map((genre) => (
+              {movie.genre?.split(",").map((genre) => (
                 <Badge
                   key={genre.trim()}
                   rounded="full"
@@ -166,36 +152,19 @@ const MovieSearch = () => {
             </Box>
             {/* IMDb Rating */}
             <Text fontWeight="bold" fontSize="3xl" mt="2">
-              {movie.Title || "N/A"}
+              {movie.title || "N/A"}
             </Text>
 
             <Box display="flex" alignItems="center" mt="2">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="24" 
-                height="24" 
-                viewBox="0 0 24 24" 
-                fill="none"
-                style={{ marginRight: '4px' }}
-              >
-                <g clipPath="url(#clip0_54_12)">
-                  <path d="M11.5 12.5L12 11V10.5L13 11L11.2844 11.1386L12 10L13.5 11.5L11.5 11L11.9307 11.1386L11.5 12.5ZM5.825 20L8.15 12.4L2 8H9.6L12 0L14.4 8H22L15.85 12.4L18.175 20L12 15.3L5.825 20Z" fill="#37FF00"/>
-                </g>
-                <defs>
-                  <clipPath id="clip0_54_12">
-                    <rect width="24" height="24" fill="white"/>
-                  </clipPath>
-                </defs>
-              </svg>
               <Text fontWeight="bold" fontSize="xl">
-                {movie.imdbRating || "N/A"}
+                {movie.rating || "N/A"}
               </Text>
             </Box>
           </Box>
           {/* Clickable Details Overlay */}
           <Box
             as={Link}
-            to={`/movie/${movie.imdbID}`}
+            to={`/movie/${movie.id}`}
             position="absolute"
             top="0"
             left="0"
