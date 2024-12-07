@@ -1,7 +1,6 @@
 import { Box, Button, Input, Text, Heading } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import AuthContext from './AuthContext';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
@@ -12,13 +11,21 @@ const Login = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('masukindisini.com/login', {
+      // Use POST request to send login credentials
+      const response = await axios.post('http://localhost:3000/users', {
         email,
         password,
       });
-      login(response.data.token); // Assuming the API returns a token
+
+      // Assuming the API returns a token if login is successful
+      if (response.data.token) {
+        login(response.data.token); // Call the login function from context
+      } else {
+        setError('Login failed. Please check your credentials.');
+      }
     } catch (err) {
       setError('Login failed. Please check your credentials.');
+      console.error('Login error:', err); // Log the error for debugging
     }
   };
 
