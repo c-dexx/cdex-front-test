@@ -1,31 +1,40 @@
 import { Box, Button, Input, Text, Heading } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
-import AuthContext from './AuthContext';
+import AuthContext from './AuthContext'; // Assuming you have an AuthContext to store login state
 import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext); // To manage logged-in state
   const [error, setError] = useState('');
 
   const handleSubmit = async () => {
     try {
-      // Use POST request to send login credentials
-      const response = await axios.post('http://localhost:3000/users', {
+      // Send login credentials to backend
+      const response = await axios.post('http://localhost:3000/users/login', {
         email,
         password,
       });
 
-      // Assuming the API returns a token if login is successful
-      if (response.data.token) {
-        login(response.data.token); // Call the login function from context
-      } else {
-        setError('Login failed. Please check your credentials.');
+      // If login is successful, handle user data
+      if (response.status === 200) {
+        // Assuming user data is returned (you can store it in context or localStorage)
+         login(response.data.user); // You can store the logged-in user in context or localStorage
+        console.log("success");
+        // Redirect to another page (e.g., dashboard)
+        // window.location.href = '/dashboard'; // Uncomment if using client-side routing
+
+        setError('');
       }
     } catch (err) {
-      setError('Login failed. Please check your credentials.');
-      console.error('Login error:', err); // Log the error for debugging
+      // Handle login error (invalid credentials, etc.)
+      if (err.response && err.response.status === 401) {
+        setError('Invalid email or password');
+      } else {
+        setError('Login failed. Please try again later.');
+      }
+      console.error('Login error:', err); // Log error for debugging
     }
   };
 
@@ -33,7 +42,8 @@ const Login = () => {
     <Box
       bgGradient="linear(to-r, gray.700, gray.900)"
       minH="100vh"
-      overflow={'hidden'}>
+      overflow={'hidden'}
+    >
       <Box maxW="sm" mx="auto" p="8" bg="gray.50" shadow="md" rounded="md" mt="72">
         <Heading as="h1" mb="6">Login</Heading>
         {error && <Text color="red.500" mb="4">{error}</Text>}
