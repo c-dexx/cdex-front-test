@@ -10,10 +10,14 @@ export const AuthProvider = ({ children }) => {
     if (loggedUser) setUser(loggedUser);
   }, []);
 
-  const login = (email) => {
-    const newUser = { email };
-    setUser(newUser);
-    localStorage.setItem('user', JSON.stringify(newUser));
+  const login = (userData) => {
+    const userInformation = {
+      email: userData.email,
+      name: userData.name,
+      id: userData.id,
+    };
+    setUser(userInformation);
+    localStorage.setItem('user', JSON.stringify(userInformation));
   };
 
   const logout = () => {

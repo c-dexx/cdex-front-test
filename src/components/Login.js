@@ -1,6 +1,7 @@
 import { Box, Button, Input, Text, Heading } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import AuthContext from './AuthContext'; // Assuming you have an AuthContext to store login state
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
@@ -8,6 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const { login } = useContext(AuthContext); // To manage logged-in state
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
@@ -17,15 +19,12 @@ const Login = () => {
         password,
       });
 
-      // If login is successful, handle user data
       if (response.status === 200) {
-        // Assuming user data is returned (you can store it in context or localStorage)
-         login(response.data.user); // You can store the logged-in user in context or localStorage
+        login(response.data.user); // You can store the logged-in user in context or localStorage
         console.log("success");
-        // Redirect to another page (e.g., dashboard)
-        // window.location.href = '/dashboard'; // Uncomment if using client-side routing
-
         setError('');
+        navigate('/');
+        
       }
     } catch (err) {
       // Handle login error (invalid credentials, etc.)
