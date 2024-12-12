@@ -48,7 +48,7 @@ const MovieDetails = () => {
     const review = {
       text: newReview,
       rating: rating,
-      author: user.email,
+      author: user.name,
     };
     setReviews([...reviews, review]);
     setNewReview("");

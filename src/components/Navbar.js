@@ -30,7 +30,7 @@ const Navbar = () => {
     >
       <HStack spacing="18" fontSize="xl">
         <Text fontSize="3xl" fontWeight="extrabold">
-          {user ? user.name.charAt(0).toUpperCase() + user.name.slice(1) : "C-DEX"}
+        {user?.name ? user.name.charAt(0).toUpperCase() + user.name.slice(1) : "C-DEX"}
         </Text>
         <Spacer />
         <HStack spacing="32">
