@@ -20,6 +20,7 @@ const Signup = () => {
         password
       });
       login(response.data);
+      console.log(response.data);
       navigate('/');
     } catch (error) {
       // Handle login error (invalid credentials, etc.)

@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import { useContext} from 'react';
 import ProfileIcon from '../asset/account.svg';
 import Logout from '../asset/logout.png';
-import SearchIcon from '../asset/search.svg'
 import AuthContext from './AuthContext';
 
 const Navbar = () => {
@@ -12,6 +11,8 @@ const Navbar = () => {
   const handleLogout = () => {
     logout();
   };
+
+  console.log(user);
   
   return (
     <Box 

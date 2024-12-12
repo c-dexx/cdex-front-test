@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     const userInformation = {
       email: userData.email,
-      name: userData.name,
+      name: userData.nama,
       id: userData.id,
     };
     setUser(userInformation);

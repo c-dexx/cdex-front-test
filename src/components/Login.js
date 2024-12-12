@@ -22,6 +22,7 @@ const Login = () => {
       if (response.status === 200) {
         login(response.data.user); // You can store the logged-in user in context or localStorage
         console.log("success");
+        console.log(response.data.user);
         setError('');
         navigate('/');
         
